@@ -4,6 +4,8 @@ import { RegisterAuthDto } from '../entities/register-auth.dto';
 import {hash, compare} from 'bcrypt';
 import { LoginAuthDto } from '../entities/login-auth.dyo';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/modules/user/entities/user.entity';
+import { UserWithToken } from '../types/user-token.type';
 
 @Injectable()
 export class AuthService {
@@ -20,23 +22,7 @@ constructor(private readonly userService: UserService,
         throw new NotFoundException(`User with email ${email} already exists`);
     } 
 
-
     const userCreated = await this.userService.create(userRegister)
-
-    /* const secretKey = process.env.JWT_SECRET;
-
-    const accessTokenOptions = {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
-      };
-
-    const payload = { id: userCreated._id, email: userCreated.email, role: userCreated.role };
-    const accessToken = await this.jwtService.signAsync(payload,{
-      secret: secretKey,
-      expiresIn: accessTokenOptions.expiresIn,
-  
-  });
-
-    return { name: userCreated.name, email: userCreated.email, token:accessToken } */
 
     return this.getToken(userCreated)
 
@@ -53,36 +39,14 @@ constructor(private readonly userService: UserService,
     const isPasswordValid = await compare(password, findUser.password) //me retorna un true o un false
  
     
-    if (!isPasswordValid) throw new HttpException('Incorrect password/contraseña incorrecta', 403)
+    if (!isPasswordValid) throw new HttpException('Incorrect password', 403)
     
-   /*  const secretKey = process.env.JWT_SECRET;
-
-    const accessTokenOptions = {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
-      };
-   
-    const payload= {id: findUser._id, email: findUser.email, role:findUser.role} //Carga util
-    const token = await this.jwtService.signAsync(payload, {
-        secret: secretKey,
-        expiresIn: accessTokenOptions.expiresIn,
-    
-    }) //firma del JWT
-    
-    const data= {
-        email:findUser.email,
-        role: findUser.role,
-        token: token,
-    };
-
-
-
-    return data; */
 
     return this.getToken(findUser)
 
   }
 
-  async getToken(user): Promise<any>{
+  async getToken(user): Promise<UserWithToken>{
     const secretKey = process.env.JWT_SECRET;
 
     const accessTokenOptions = {
@@ -94,13 +58,13 @@ constructor(private readonly userService: UserService,
     const accessToken = await this.jwtService.signAsync(payload,{
       secret: secretKey,
       expiresIn: accessTokenOptions.expiresIn,
-  });
+    });
 
-  const data= {
-    email:user.email,
-    role: user.role,
-    token: accessToken,
-};
+    const data= {
+      email:user.email,
+      role: user.role,
+      token: accessToken,
+    };
 
 
 
