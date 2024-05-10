@@ -1,8 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-
-import { RegisterAuthDto } from '../entities/register-auth.dto';
-import { LoginAuthDto } from '../entities/login-auth.dyo';
+import { Controller,  Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from '../service/auth.service';
+import { LoginAuthDto, RegisterAuthDto } from '../entities';
 
 
 @Controller('auth')

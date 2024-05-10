@@ -1,16 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/libs/auth/guard/jwt-auth.guard';
-import { RequestWithUser } from './interfaces/request-user.interface';
-import { Roles } from 'src/libs/decorators/roles.decorator';
-import { RolesGuard } from 'src/libs/auth/guard/roles.guard';
+import { UserService } from './user.service';
 import { Role } from '../../libs/common/enums/role.enum';
-import { Auth } from 'src/libs/decorators/auth.decorator';
-import { ActiveUser } from 'src/libs/decorators/active-user.decorator';
-import { UserActiveInterface } from 'src/libs/common/interfaces/user-active.interface';
+import { UserActiveInterface } from '../../libs/common/interfaces/user-active.interface';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { ActiveUser, Auth } from '../../libs/decorators';
+
 
 
 

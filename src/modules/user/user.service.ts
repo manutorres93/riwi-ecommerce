@@ -1,15 +1,15 @@
+import { InjectModel } from '@nestjs/mongoose';
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {hash} from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
 import { User } from './entities/user.entity';
-import {hash} from 'bcrypt';
+import * as mongoose from 'mongoose';
 
 @Injectable()
 export class UserService {
 
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: mongoose.Model<User>) {}
   async create(createUserDto: CreateUserDto): Promise<User>{
     const {password,email}=createUserDto
     const existingUser = await this.userModel
