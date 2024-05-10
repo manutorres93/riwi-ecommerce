@@ -20,9 +20,26 @@ constructor(private readonly userService: UserService,
         throw new NotFoundException(`User with email ${email} already exists`);
     } 
 
+
     const userCreated = await this.userService.create(userRegister)
 
-    return { name: userCreated.name, email: userCreated.email}
+    /* const secretKey = process.env.JWT_SECRET;
+
+    const accessTokenOptions = {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
+      };
+
+    const payload = { id: userCreated._id, email: userCreated.email, role: userCreated.role };
+    const accessToken = await this.jwtService.signAsync(payload,{
+      secret: secretKey,
+      expiresIn: accessTokenOptions.expiresIn,
+  
+  });
+
+    return { name: userCreated.name, email: userCreated.email, token:accessToken } */
+
+    return this.getToken(userCreated)
+
   }
 
   async login(userLogin:LoginAuthDto){
@@ -38,7 +55,7 @@ constructor(private readonly userService: UserService,
     
     if (!isPasswordValid) throw new HttpException('Incorrect password/contraseña incorrecta', 403)
     
-    const secretKey = process.env.JWT_SECRET;
+   /*  const secretKey = process.env.JWT_SECRET;
 
     const accessTokenOptions = {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
@@ -59,10 +76,36 @@ constructor(private readonly userService: UserService,
 
 
 
-    return data;
+    return data; */
+
+    return this.getToken(findUser)
 
   }
 
-  
+  async getToken(user): Promise<any>{
+    const secretKey = process.env.JWT_SECRET;
+
+    const accessTokenOptions = {
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY || '15m',
+      };
+
+    const payload = { id: user._id, email: user.email, role: user.role };
+    
+    const accessToken = await this.jwtService.signAsync(payload,{
+      secret: secretKey,
+      expiresIn: accessTokenOptions.expiresIn,
+  });
+
+  const data= {
+    email:user.email,
+    role: user.role,
+    token: accessToken,
+};
+
+
+
+    return data;
+
+  }
 
 }
