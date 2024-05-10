@@ -20,7 +20,9 @@ constructor(private readonly userService: UserService,
         throw new NotFoundException(`User with email ${email} already exists`);
     } 
 
-    return this.userService.create(userRegister)
+    const userCreated = await this.userService.create(userRegister)
+
+    return { name: userCreated.name, email: userCreated.email}
   }
 
   async login(userLogin:LoginAuthDto){

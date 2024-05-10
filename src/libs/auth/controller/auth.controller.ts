@@ -12,13 +12,8 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() registerAuthDto: RegisterAuthDto) {
-    
-    return this.authService.register(registerAuthDto)
-    
-    console.log({body: registerAuthDto});
-    
-    /* const token = await this.authService.register(registerAuthDto);
-    return { access_token: token.access_token }; */
+    return this.authService.register(registerAuthDto);
+   
    } 
 
 

@@ -15,28 +15,19 @@ import { UserActiveInterface } from 'src/libs/common/interfaces/user-active.inte
 
 
 @ApiBearerAuth()
-//@UseGuards(JwtAuthGuard)
+@Auth(Role.ADMIN)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
 
-  @Post()
-  //@UsePipes(new ValidationPipe())
+  @Post()  
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  /* @Get()
-  @Roles(Role.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  findAll(@Req() req: RequestWithUser) {
-    console.log(req.user);
-    return this.userService.findAll();
-  } */
 
   @Get()
-  @Auth(Role.USER)
   findAll(@ActiveUser() user:UserActiveInterface) {
     console.log(user);
     return this.userService.findAll();
