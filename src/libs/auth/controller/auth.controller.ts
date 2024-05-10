@@ -21,11 +21,6 @@ export class AuthController {
     return { access_token: token.access_token }; */
    } 
 
- /*  @Post('login')
-  async loginUser(@Body() loginAuthDto: LoginAuthDto){
-    return this.authService.login(loginAuthDto)
-
-  } */
 
   @Post('login')
   async loginUser(@Body() loginAuthDto: LoginAuthDto){
