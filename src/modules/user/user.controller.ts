@@ -1,33 +1,43 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Role } from '../../libs/common/enums/role.enum';
+import { UserActiveInterface } from '../../libs/common/interfaces/user-active.interface';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { ActiveUser, Auth } from '../../libs/decorators';
+
+
 
 
 @ApiBearerAuth()
-//@UseGuards(JwtAuthGuard)
+@ApiTags('users')
+@Auth(Role.ADMIN)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
 
-  @Post()
-  //@UsePipes(new ValidationPipe())
+  @Post()  
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
+
   @Get()
-  //@Roles('admin')
-  //@UseGuards(JwtAuthGuard, RolesGuard)
-  findAll() {
+  findAll(@ActiveUser() user:UserActiveInterface) {
+    console.log(user);
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+
+  @Get('id/:id')
+  findOneById(@Param('id') id: string) {
+    return this.userService.findOneById(id);
+  }
+
+  @Get('email/:email')
+  findOneByEmail(@Param('email') email: string) {
+    return this.userService.findOneByEmail(email);
   }
 
   @Patch(':id')
