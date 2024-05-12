@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { Role } from '../../libs/common/enums/role.enum';
 import { UserActiveInterface } from '../../libs/common/interfaces/user-active.interface';
@@ -10,6 +10,7 @@ import { ActiveUser, Auth } from '../../libs/decorators';
 
 
 @ApiBearerAuth()
+@ApiTags('users')
 @Auth(Role.ADMIN)
 @Controller('user')
 export class UserController {
