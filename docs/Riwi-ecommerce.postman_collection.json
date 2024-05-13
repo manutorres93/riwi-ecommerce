@@ -70,11 +70,21 @@
 		{
 			"name": "CreateUserFromURL",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\":\"manuela\",\r\n    \"email\": \"manuela@gmail.com\",\r\n    \"password\": \"abc1234\",\r\n    \"role\":\"admin\"\r\n\r\n}",
+					"raw": "{\r\n    \"name\":\"manuela\",\r\n    \"email\": \"manuela@gmail.com\",\r\n    \"password\": \"abc123\"\r\n\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -128,12 +138,30 @@
 		},
 		{
 			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Extract and store access_token if response status is 201\", function () {\r",
+							"pm.expect(pm.response.code).to.equal(201);\r",
+							"if (pm.response.code === 201) {\r",
+							"    var responseData = pm.response.json();\r",
+							"    pm.environment.set('access_token', responseData.token);\r",
+							"}\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n   \r\n    \"email\": \"jaime@gmail.com\",\r\n    \"password\": \"1234\"\r\n  \r\n    \r\n    \r\n}",
+					"raw": "{\r\n   \r\n    \"email\": \"manuela@gmail.com\",\r\n    \"password\": \"abc123\"\r\n  \r\n    \r\n    \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -163,7 +191,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/v1/api/user/63d7d2cb0f462171c798560",
+					"raw": "http://localhost:3000/v1/api/user/id/663d7d2cb0f462171c798560",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -173,7 +201,8 @@
 						"v1",
 						"api",
 						"user",
-						"63d7d2cb0f462171c798560"
+						"id",
+						"663d7d2cb0f462171c798560"
 					]
 				}
 			},
@@ -236,8 +265,22 @@
 		{
 			"name": "DeleteUser",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/v1/api/user/663d831db45b10552e6c1642",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"v1",
+						"api",
+						"user",
+						"663d831db45b10552e6c1642"
+					]
+				}
 			},
 			"response": []
 		}
