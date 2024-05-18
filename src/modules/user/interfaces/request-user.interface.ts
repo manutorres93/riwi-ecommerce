@@ -1,4 +1,4 @@
-import { Request } from 'express';
+/* import { Request } from 'express';
 
 export interface RequestWithUser extends Request {
     user:{
@@ -6,4 +6,4 @@ export interface RequestWithUser extends Request {
       name:string;
       role:string;
     }
-  }
+  } */
